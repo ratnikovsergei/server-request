@@ -8,8 +8,7 @@ export const TodoList = () => {
   const [newTodo, setNewTodo] = useState(null);
   const [newTodoName, setNewTodoName] = useState(null);
   const [isModal, setIsModal] = useState(false);
-
-  const setModal = () => setIsModal(true);
+  const [isSorted, setIsSorted] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:3000/todos')
@@ -55,9 +54,13 @@ export const TodoList = () => {
       });
   };
 
+  const sortedList = isSorted
+    ? [...todos].sort((a, b) => (a.title > b.title ? 1 : -1))
+    : todos;
+
   return (
     <div className="main-container">
-      {isModal && <Modal />}
+      {isModal && <Modal closeModal={() => setIsModal(false)} />}
       <div className="upper-block">
         <div>
           <input
@@ -73,11 +76,16 @@ export const TodoList = () => {
       </div>
       <div id="todo-list">
         <h2>Задачи на сегодня:</h2>
+        <div>
+          <button onClick={() => setIsSorted(!isSorted)}>
+            {isSorted ? 'Убрать сортировку' : 'Сортировка А-Я'}
+          </button>
+        </div>
         <ul>
-          {todos.map(({ id, title }) => (
+          {sortedList.map(({ id, title }) => (
             <li key={id} className="todo-item">
               {title}
-              <button type="button" onClick={setModal}>
+              <button type="button" onClick={() => setIsModal(true)}>
                 Изменить
               </button>
               <button
