@@ -1,10 +1,11 @@
 import './App.css';
+import { TodoList } from './TodoList/TodoList';
 
 function App() {
   return (
     <div className="app">
-      <p>Задание 1 в ветке - task1</p>
-      <p>Задание 2 в ветке - task2</p>
+      <h1>Список задач с использованием JSON Server</h1>
+      <TodoList />
     </div>
   );
 }
