@@ -6,6 +6,7 @@ export const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [refreshTodos, setRefreshTodos] = useState(false);
   const [newTodo, setNewTodo] = useState(null);
+  const [currentTodoId, setCurrentTodoId] = useState(null);
   const [newTodoName, setNewTodoName] = useState(null);
   const [isModal, setIsModal] = useState(false);
   const [isSorted, setIsSorted] = useState(false);
@@ -14,7 +15,7 @@ export const TodoList = () => {
     fetch('http://localhost:3000/todos')
       .then((requestData) => requestData.json())
       .then((loadedTodos) => setTodos(loadedTodos));
-  }, [refreshTodos]);
+  }, [refreshTodos, newTodo, newTodoName]);
 
   const handleAddTodo = () => {
     fetch('http://localhost:3000/todos', {
@@ -43,8 +44,8 @@ export const TodoList = () => {
   const handleRenameTodo = (id) => {
     fetch(`http://localhost:3000/todos/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application-json' },
-      body: { title: newTodoName },
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTodoName, completed: false }),
     })
       .then((response) => response.json())
       .then((res) => {
@@ -60,15 +61,28 @@ export const TodoList = () => {
 
   return (
     <div className="main-container">
-      {isModal && <Modal closeModal={() => setIsModal(false)} />}
+      {isModal && (
+        <Modal
+          currentId={currentTodoId}
+          handleRename={handleRenameTodo}
+          newTodoName={newTodoName}
+          setNewTodoName={setNewTodoName}
+          close={() => setIsModal(false)}
+        />
+      )}
       <div className="upper-block">
         <div>
           <input
             type="text"
             placeholder="Новая задача"
-            onChange={({ target }) => setNewTodo(target.value)}
+            onChange={({ target }) => {
+              setNewTodo(target.value);
+              console.log(newTodo);
+            }}
           />
-          <button onClick={handleAddTodo}>Добавить</button>
+          <button onClick={handleAddTodo} disabled={!newTodo}>
+            Добавить
+          </button>
         </div>
         <div>
           <input type="text" placeholder="Поиск задачи" />
@@ -85,7 +99,13 @@ export const TodoList = () => {
           {sortedList.map(({ id, title }) => (
             <li key={id} className="todo-item">
               {title}
-              <button type="button" onClick={() => setIsModal(true)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrentTodoId(id);
+                  setIsModal(true);
+                }}
+              >
                 Изменить
               </button>
               <button
