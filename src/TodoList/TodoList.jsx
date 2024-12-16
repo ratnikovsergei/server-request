@@ -1,12 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Modal } from '../Modal/Modal';
+import { useGetTodos, useAddTodo, useRemoveTodo } from '../hooks';
 import './TodoList.css';
 
 export const TodoList = () => {
-  const [todos, setTodos] = useState([]);
   const [refreshTodos, setRefreshTodos] = useState(false);
-  const [newTodo, setNewTodo] = useState('');
+  const { todos } = useGetTodos(refreshTodos);
+  const { handleAddTodo, newTodo, setNewTodo } = useAddTodo(
+    refreshTodos,
+    setRefreshTodos
+  );
+  const { handleRemoveTodo } = useRemoveTodo(refreshTodos, setRefreshTodos);
+
   const [currentTodoId, setCurrentTodoId] = useState(null);
   const [newTodoName, setNewTodoName] = useState('');
   const [isModal, setIsModal] = useState(false);
@@ -14,42 +20,11 @@ export const TodoList = () => {
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
 
-  useEffect(() => {
-    fetch('http://localhost:3000/todos')
-      .then((requestData) => requestData.json())
-      .then((loadedTodos) => setTodos(loadedTodos));
-  }, [refreshTodos]);
-
-  const handleAddTodo = () => {
-    fetch('http://localhost:3000/todos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTodo, completed: false }),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log('Задача добавлена в список:', res);
-        setRefreshTodos(!refreshTodos);
-        setNewTodo('');
-      });
-  };
-
-  const handleRemoveTodo = (id) => {
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: 'DELETE',
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log('Задача удалена:', res);
-        setRefreshTodos(!refreshTodos);
-      });
-  };
-
   const handleRenameTodo = (id) => {
     fetch(`http://localhost:3000/todos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTodoName, completed: false }),
+      body: JSON.stringify({ title: newTodoName.trim(), completed: false }),
     })
       .then((response) => response.json())
       .then((res) => {
@@ -74,7 +49,7 @@ export const TodoList = () => {
         <Modal
           currentId={currentTodoId}
           handleRename={handleRenameTodo}
-          newTodoName={newTodoName}
+          oldTodoName={newTodoName}
           setNewTodoName={setNewTodoName}
           close={() => setIsModal(false)}
         />
@@ -88,7 +63,6 @@ export const TodoList = () => {
             value={newTodo}
             onChange={({ target }) => {
               setNewTodo(target.value);
-              console.log(newTodo);
             }}
           />
           <button onClick={handleAddTodo} disabled={!newTodo}>
@@ -122,6 +96,7 @@ export const TodoList = () => {
                   type="button"
                   onClick={() => {
                     setCurrentTodoId(id);
+                    setNewTodoName(title);
                     setIsModal(true);
                   }}
                 >

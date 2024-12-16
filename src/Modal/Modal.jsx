@@ -3,7 +3,7 @@ import './Modal.css';
 export const Modal = ({
   currentId,
   handleRename,
-  newTodoName,
+  oldTodoName,
   setNewTodoName,
   close,
 }) => {
@@ -13,9 +13,9 @@ export const Modal = ({
         <h3>Новое название задачи</h3>
         <input
           type="text"
+          placeholder={oldTodoName}
           onChange={({ target }) => {
             setNewTodoName(target.value);
-            console.log(newTodoName);
           }}
         />
         <button onClick={() => handleRename(currentId)}>Применить</button>

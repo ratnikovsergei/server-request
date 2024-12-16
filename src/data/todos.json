@@ -1,3 +1,19 @@
 {
-  "todos": []
+  "todos": [
+    {
+      "title": "Поиграть на улице",
+      "completed": false,
+      "id": 1
+    },
+    {
+      "title": "Сделать уроки",
+      "completed": false,
+      "id": 2
+    },
+    {
+      "title": "Изучить новую тему",
+      "completed": false,
+      "id": 3
+    }
+  ]
 }
