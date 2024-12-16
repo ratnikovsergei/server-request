@@ -1,19 +1,14 @@
 {
   "todos": [
     {
-      "title": "Поиграть на улице",
+      "title": "Позавтракать",
       "completed": false,
       "id": 1
     },
     {
-      "title": "Сделать уроки",
+      "title": "Спеть песенку",
       "completed": false,
       "id": 2
-    },
-    {
-      "title": "Изучить новую тему",
-      "completed": false,
-      "id": 3
     }
   ]
 }

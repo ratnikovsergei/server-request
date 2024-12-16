@@ -65,7 +65,7 @@ export const TodoList = () => {
               setNewTodo(target.value);
             }}
           />
-          <button onClick={handleAddTodo} disabled={!newTodo}>
+          <button className="add-btn" onClick={handleAddTodo} disabled={!newTodo}>
             Добавить
           </button>
         </div>
@@ -77,7 +77,9 @@ export const TodoList = () => {
             value={searchValue}
             onChange={({ target }) => setSearchValue(target.value)}
           />
-          <button onClick={() => setSearchValue('')}>Сбросить</button>
+          <button className="refresh-btn" onClick={() => setSearchValue('')}>
+            Сбросить
+          </button>
         </div>
       </div>
       <div id="todo-list">
@@ -92,28 +94,32 @@ export const TodoList = () => {
             filteredList.map(({ id, title }) => (
               <li key={id} className="todo-item">
                 {title}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentTodoId(id);
-                    setNewTodoName(title);
-                    setIsModal(true);
-                  }}
-                >
-                  Изменить
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleRemoveTodo(id);
-                  }}
-                >
-                  Удалить
-                </button>
+                <div>
+                  <button
+                    type="button"
+                    className="rename-btn"
+                    onClick={() => {
+                      setCurrentTodoId(id);
+                      setNewTodoName(title);
+                      setIsModal(true);
+                    }}
+                  >
+                    Изменить
+                  </button>
+                  <button
+                    type="button"
+                    className="remove-btn"
+                    onClick={() => {
+                      handleRemoveTodo(id);
+                    }}
+                  >
+                    Удалить
+                  </button>
+                </div>
               </li>
             ))
           ) : (
-            <p>Нет задач, соответствующих поиску</p>
+            <p>Задачи отсутствуют</p>
           )}
         </ul>
       </div>

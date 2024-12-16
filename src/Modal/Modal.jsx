@@ -10,16 +10,21 @@ export const Modal = ({
   return (
     <div className="modal">
       <div className="modal-body">
-        <h3>Новое название задачи</h3>
+        <h3 className="modal-title">Новое название задачи</h3>
         <input
           type="text"
+          className="rename-input"
           placeholder={oldTodoName}
           onChange={({ target }) => {
             setNewTodoName(target.value);
           }}
         />
-        <button onClick={() => handleRename(currentId)}>Применить</button>
-        <button onClick={() => close()}>Закрыть</button>
+        <button className="modal-btn" onClick={() => handleRename(currentId)}>
+          Применить
+        </button>
+        <button className="modal-btn" onClick={() => close()}>
+          Закрыть
+        </button>
       </div>
     </div>
   );
