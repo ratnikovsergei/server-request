@@ -7,9 +7,10 @@ import './TodoList.css';
 export const TodoList = () => {
   const [refreshTodos, setRefreshTodos] = useState(false);
   const { todos } = useGetTodos(refreshTodos);
-  const { handleAddTodo, newTodo, setNewTodo } = useAddTodo(
+  const { handleAddTodo, newTodo, setNewTodo, errorMsg } = useAddTodo(
     refreshTodos,
-    setRefreshTodos
+    setRefreshTodos,
+    todos
   );
   const { handleRemoveTodo } = useRemoveTodo(refreshTodos, setRefreshTodos);
 
@@ -68,6 +69,7 @@ export const TodoList = () => {
           <button className="add-btn" onClick={handleAddTodo} disabled={!newTodo}>
             Добавить
           </button>
+          {errorMsg && <p className="error-msg">{errorMsg}</p>}
         </div>
         <div>
           <input
@@ -90,14 +92,15 @@ export const TodoList = () => {
           </button>
         </div>
         <ul>
-          {filteredList.length > 0 ? (
+          {todos.length === 0 ? (
+            <p className="msg">На сегодня задач нет</p>
+          ) : filteredList.length > 0 ? (
             filteredList.map(({ id, title }) => (
               <li key={id} className="todo-item">
                 {title}
-                <div>
+                <div className="todo-item-btns">
                   <button
                     type="button"
-                    className="rename-btn"
                     onClick={() => {
                       setCurrentTodoId(id);
                       setNewTodoName(title);
@@ -108,7 +111,6 @@ export const TodoList = () => {
                   </button>
                   <button
                     type="button"
-                    className="remove-btn"
                     onClick={() => {
                       handleRemoveTodo(id);
                     }}
@@ -119,7 +121,7 @@ export const TodoList = () => {
               </li>
             ))
           ) : (
-            <p>Задачи отсутствуют</p>
+            <p className="msg">Задач, соответствующих поиску, не найдено</p>
           )}
         </ul>
       </div>

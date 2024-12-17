@@ -1,12 +1,14 @@
 .main-container {
-  max-width: 650px;
+  width: 700px;
   margin: 0 auto;
+  border: 1px solid gray;
+  border-radius: 8px;
 }
 
 .upper-block {
   display: flex;
   justify-content: space-between;
-  margin: 5px 15px 0 15px;
+  margin: 20px 15px 0 15px;
 }
 
 .upper-block input[type='text'] {
@@ -32,6 +34,25 @@
   padding: 3px;
 }
 
-.rename-btn {
+.todo-item-btns button {
   margin-right: 5px;
+}
+
+.todo-item-btns button:last-child {
+  margin-right: 20px;
+}
+
+.msg {
+  padding-top: 30px;
+  padding-right: 40px;
+  color: grey;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.error-msg {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
