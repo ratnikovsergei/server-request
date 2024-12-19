@@ -13,8 +13,9 @@ function App() {
         .then((requestData) => requestData.json())
         .then((res) => {
           setTodoItems(res);
-        });
-      setisLoading(false);
+        })
+        .catch((error) => console.log('Data request error:', error))
+        .finally(() => setisLoading(false));
     }, 2000);
   }, []);
 
