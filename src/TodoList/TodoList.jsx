@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { Modal } from '../Modal/Modal';
-import { useGetTodos, useAddTodo, useRemoveTodo } from '../hooks';
+import { Link } from 'react-router-dom';
+import { useGetTodos, useAddTodo } from '../hooks';
 import './TodoList.css';
 
 export const TodoList = () => {
@@ -12,29 +12,10 @@ export const TodoList = () => {
     setRefreshTodos,
     todos
   );
-  const { handleRemoveTodo } = useRemoveTodo(refreshTodos, setRefreshTodos);
 
-  const [currentTodoId, setCurrentTodoId] = useState(null);
-  const [newTodoName, setNewTodoName] = useState('');
-  const [isModal, setIsModal] = useState(false);
-  const [isSorted, setIsSorted] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
-
-  const handleRenameTodo = (id) => {
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTodoName.trim(), completed: false }),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log('Задача переименована:', res);
-        setRefreshTodos(!refreshTodos);
-        setIsModal(false);
-        setNewTodoName('');
-      });
-  };
+  const [isSorted, setIsSorted] = useState(false);
 
   const sortedList = isSorted
     ? [...todos].sort((a, b) => (a.title > b.title ? 1 : -1))
@@ -46,15 +27,6 @@ export const TodoList = () => {
 
   return (
     <div className="main-container">
-      {isModal && (
-        <Modal
-          currentId={currentTodoId}
-          handleRename={handleRenameTodo}
-          oldTodoName={newTodoName}
-          setNewTodoName={setNewTodoName}
-          close={() => setIsModal(false)}
-        />
-      )}
       <div className="upper-block">
         <div>
           <input
@@ -97,27 +69,9 @@ export const TodoList = () => {
           ) : filteredList.length > 0 ? (
             filteredList.map(({ id, title }) => (
               <li key={id} className="todo-item">
-                {title}
-                <div className="todo-item-btns">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCurrentTodoId(id);
-                      setNewTodoName(title);
-                      setIsModal(true);
-                    }}
-                  >
-                    Изменить
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleRemoveTodo(id);
-                    }}
-                  >
-                    Удалить
-                  </button>
-                </div>
+                <Link to={`/task/${id}`} className="link">
+                  {title.length > 30 ? `${title.slice(0, 30)}...` : title}
+                </Link>
               </li>
             ))
           ) : (
