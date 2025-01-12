@@ -1,19 +1,12 @@
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Modal } from '../Modal/Modal';
-import { useGetTodos, useAddTodo, useRemoveTodo } from '../hooks';
+import { useTodos } from '../TodoContext';
 import './TodoList.css';
 
 export const TodoList = () => {
-  const [refreshTodos, setRefreshTodos] = useState(false);
-  const { todos } = useGetTodos(refreshTodos);
-  const { handleAddTodo, newTodo, setNewTodo, errorMsg } = useAddTodo(
-    refreshTodos,
-    setRefreshTodos,
-    todos
-  );
-  const { handleRemoveTodo } = useRemoveTodo(refreshTodos, setRefreshTodos);
-
+  const { todos, addTodo, removeTodo, renameTodo } = useTodos();
+  const [newTodo, setNewTodo] = useState('');
   const [currentTodoId, setCurrentTodoId] = useState(null);
   const [newTodoName, setNewTodoName] = useState('');
   const [isModal, setIsModal] = useState(false);
@@ -21,19 +14,10 @@ export const TodoList = () => {
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
 
-  const handleRenameTodo = (id) => {
-    fetch(`http://localhost:3000/todos/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTodoName.trim(), completed: false }),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log('Задача переименована:', res);
-        setRefreshTodos(!refreshTodos);
-        setIsModal(false);
-        setNewTodoName('');
-      });
+  const handleRenameTodo = () => {
+    renameTodo(currentTodoId, newTodoName.trim());
+    setIsModal(false);
+    setNewTodoName('');
   };
 
   const sortedList = isSorted
@@ -66,10 +50,13 @@ export const TodoList = () => {
               setNewTodo(target.value);
             }}
           />
-          <button className="add-btn" onClick={handleAddTodo} disabled={!newTodo}>
+          <button
+            className="add-btn"
+            onClick={() => addTodo(newTodo)}
+            disabled={!newTodo}
+          >
             Добавить
           </button>
-          {errorMsg && <p className="error-msg">{errorMsg}</p>}
         </div>
         <div>
           <input
@@ -112,7 +99,7 @@ export const TodoList = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      handleRemoveTodo(id);
+                      removeTodo(id);
                     }}
                   >
                     Удалить
