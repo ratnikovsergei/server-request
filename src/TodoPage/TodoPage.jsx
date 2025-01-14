@@ -7,7 +7,6 @@ export const TodoPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [todo, setTodo] = useState({});
-  const [newTodoName, setNewTodoName] = useState('');
   const [isModal, setIsModal] = useState(false);
 
   useEffect(() => {
@@ -19,13 +18,13 @@ export const TodoPage = () => {
       });
   }, [id]);
 
-  const handleRenameTodo = () => {
+  const handleRenameTodo = (newValue) => {
     fetch(`http://localhost:3000/todos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTodoName.trim(), completed: todo.completed }),
+      body: JSON.stringify({ title: newValue.trim(), completed: todo.completed }),
     }).then(() => {
-      setTodo((prevTodo) => ({ ...prevTodo, title: newTodoName }));
+      setTodo((prevTodo) => ({ ...prevTodo, title: newValue }));
       setIsModal(false);
     });
   };
@@ -43,7 +42,6 @@ export const TodoPage = () => {
           currentId={id}
           handleRename={handleRenameTodo}
           oldTodoName={todo.title}
-          setNewTodoName={setNewTodoName}
           close={() => setIsModal(false)}
         />
       )}
