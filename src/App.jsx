@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<TodoList />} />
         <Route path="/task/:id" element={<TodoPage />} />
-        <Route path="/404" element={<TodoList />} />
+        <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
