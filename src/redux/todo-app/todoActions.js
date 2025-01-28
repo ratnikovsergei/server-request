@@ -2,7 +2,7 @@ import {
   ADD_TODO,
   REMOVE_TODO,
   TOGGLE_STATUS,
-  SET_FILTER,
+  SET_SEARCH,
   DELETE_ALL,
   EDIT_TODO,
   TOGGLE_SORT,
@@ -36,10 +36,10 @@ export const toggleStatus = (id) => {
   };
 };
 
-export const setFilter = (filter) => {
+export const setSearch = (search) => {
   return {
-    type: SET_FILTER,
-    payload: filter,
+    type: SET_SEARCH,
+    payload: search,
   };
 };
 

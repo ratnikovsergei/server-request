@@ -1,3 +1,3 @@
-export * from "./filterReducer";
+export * from "./searchReducer";
 export * from "./todoReducer";
 export * from "./sortReducer";

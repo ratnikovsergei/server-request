@@ -7,10 +7,7 @@ const initialState = {
 export const sortReducer = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_SORT:
-      return {
-        ...state,
-        ascending: !state.ascending,
-      };
+      return { ascending: !state.ascending };
     default:
       return state;
   }

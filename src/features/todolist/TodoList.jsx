@@ -4,9 +4,9 @@ import { TodoItem } from "../../entities/TodoItem/TodoItem";
 
 export const TodoList = () => {
   const todos = useSelector((state) => state.todos.todos);
-  const filter = useSelector((state) => state.filter.filter);
+  const search = useSelector((state) => state.search.searchValue);
   const ascending = useSelector((state) => state.sort.ascending);
-  const [debouncedFilterValue] = useDebounce(filter, 300);
+  const [debouncedFilterValue] = useDebounce(search, 300);
 
   const sortedTodos = ascending
     ? [...todos].sort((a, b) => (a.title > b.title ? 1 : -1))

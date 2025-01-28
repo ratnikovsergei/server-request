@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware, combineReducers, compose } from "redux";
 import { thunk } from "redux-thunk";
-import { todoReducer, filterReducer, sortReducer } from "./todo-app/reducers";
+import { todoReducer, searchReducer, sortReducer } from "./todo-app/reducers";
 
 const appReducer = combineReducers({
   todos: todoReducer,
-  filter: filterReducer,
+  search: searchReducer,
   sort: sortReducer,
 });
 

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import {
   addTodo,
   deleteAllTodos,
-  setFilter,
+  setSearch,
   toggleSort,
 } from "../../redux/todo-app/todoActions";
 import { BsPlus, BsSearch, BsArrowDownUp } from "react-icons/bs";
@@ -11,7 +11,7 @@ import { BsPlus, BsSearch, BsArrowDownUp } from "react-icons/bs";
 export const TodoForm = () => {
   const dispatch = useDispatch();
   const [task, setTask] = useState("");
-  const [filterValue, setFilterValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   const handleAddTodo = () => {
     if (task.trim()) {
@@ -24,9 +24,9 @@ export const TodoForm = () => {
     dispatch(deleteAllTodos());
   };
 
-  const handleFilterChange = (e) => {
-    setFilterValue(e.target.value);
-    dispatch(setFilter(filterValue));
+  const handleSearchChange = (value) => {
+    setSearchValue(value);
+    dispatch(setSearch(value));
   };
 
   const handleToggleSort = () => {
@@ -54,8 +54,8 @@ export const TodoForm = () => {
         <div className="flex items-center mb-4">
           <input
             type="text"
-            value={filterValue}
-            onChange={handleFilterChange}
+            value={searchValue}
+            onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Поиск задачи"
             className="flex-grow p-1.75 border-b-2 bg-white border-gray-300 focus:outline-none focus:border-blue-500"
           />
