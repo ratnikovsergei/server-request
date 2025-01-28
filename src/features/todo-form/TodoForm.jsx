@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addTodo,
   deleteAllTodos,
   setSearch,
   toggleSort,
 } from "../../redux/todo-app/todoActions";
-import { BsPlus, BsSearch, BsArrowDownUp } from "react-icons/bs";
+import { BsPlus, BsSearch, BsSortAlphaDown, BsSortAlphaUpAlt } from "react-icons/bs";
 
 export const TodoForm = () => {
   const dispatch = useDispatch();
+  const ascending = useSelector((state) => state.sort.ascending);
   const [task, setTask] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
@@ -74,7 +75,7 @@ export const TodoForm = () => {
             className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
             onClick={handleToggleSort}
           >
-            <BsArrowDownUp size={20} />
+            {ascending ? <BsSortAlphaUpAlt size={20} /> : <BsSortAlphaDown size={20} />}
           </button>
         </div>
       </div>
