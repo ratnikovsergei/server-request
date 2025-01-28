@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo, setFilter, toggleSort } from "../../redux/todo-app/todoActions";
+import {
+  addTodo,
+  deleteAllTodos,
+  setFilter,
+  toggleSort,
+} from "../../redux/todo-app/todoActions";
 import { BsPlus, BsSearch, BsArrowDownUp } from "react-icons/bs";
 
 export const TodoForm = () => {
@@ -13,6 +18,10 @@ export const TodoForm = () => {
       dispatch(addTodo({ id: Date.now(), title: task, completed: false }));
       setTask("");
     }
+  };
+
+  const handleDeleteTodos = () => {
+    dispatch(deleteAllTodos());
   };
 
   const handleFilterChange = (e) => {
@@ -54,12 +63,20 @@ export const TodoForm = () => {
             <BsSearch size={20} />
           </span>
         </div>
-        <button
-          className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
-          onClick={handleToggleSort}
-        >
-          <BsArrowDownUp size={20} />
-        </button>
+        <div className="flex space-x-4">
+          <button
+            className="text-sm px-2 py-1 bg-red-500 text-white rounded"
+            onClick={handleDeleteTodos}
+          >
+            Очистить список
+          </button>
+          <button
+            className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            onClick={handleToggleSort}
+          >
+            <BsArrowDownUp size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );
